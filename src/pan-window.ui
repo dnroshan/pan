@@ -1,0 +1,389 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk" version="4.0"/>
+  <requires lib="Adw" version="1.0"/>
+  <template class="PanWindow" parent="AdwApplicationWindow">
+    <property name="title" translatable="yes">Pan</property>
+    <property name="default-width">1024</property>
+    <property name="default-height">600</property>
+    <style>
+      <class name="devel"/>
+    </style>
+    <property name="content">
+      <object class="AdwToolbarView">
+        <child type="top">
+          <object class="AdwHeaderBar">
+            <property name="title-widget">
+              <object class="AdwWindowTitle" id="window_title">
+                <property name="title">Pan</property>
+              </object>
+            </property>
+            <child type="end">
+              <object class="GtkMenuButton">
+                <property name="primary">True</property>
+                <property name="icon-name">open-menu-symbolic</property>
+                <property name="tooltip-text" translatable="yes">Main Menu</property>
+                <property name="menu-model">primary_menu</property>
+              </object>
+            </child>
+            <child type="start">
+              <object class="GtkButton">
+                <property name="icon-name">document-new-symbolic</property>
+                <property name="action-name">win.new</property>
+              </object>
+            </child>
+            <child type="start">
+              <object class="GtkButton">
+                <property name="icon-name">document-open-symbolic</property>
+                <property name="action-name">win.open</property>
+              </object>
+            </child>
+            <child type="start">
+              <object class="GtkButton" id="save_button">
+                <property name="icon-name">document-save-symbolic</property>
+                <property name="action-name">win.save</property>
+              </object>
+            </child>
+            <child type="start">
+              <object class="GtkButton" id="undo_button">
+                <property name="icon-name">edit-undo-symbolic</property>
+                <property name="action-name">win.undo</property>
+              </object>
+            </child>
+            <child type="start">
+              <object class="GtkButton" id="redo_button">
+                <property name="icon-name">edit-redo-symbolic</property>
+                <property name="action-name">win.redo</property>
+              </object>
+            </child>
+            <child type="start">
+              <object class="GtkButton" id="zoom_in_button">
+                <property name="icon-name">zoom-in-symbolic</property>
+              </object>
+            </child>
+            <child type="start">
+              <object class="GtkButton" id="zoom_out_button">
+                <property name="icon-name">zoom-out-symbolic</property>
+              </object>
+            </child>
+            <child type="start">
+              <object class="GtkButton" id="zoom_fit_button">
+                <property name="icon-name">zoom-fit-best-symbolic</property>
+              </object>
+            </child>
+            <child type="start">
+              <object class="GtkButton" id="zoom_original_button">
+                <property name="icon-name">zoom-original-symbolic</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <property name="content">
+          <object class="AdwOverlaySplitView" id="paned">
+            <property name="collapsed">FALSE</property>
+            <property name="sidebar-position">GTK_PACK_END</property>
+            <child type="content">
+              <object class="GtkScrolledWindow">
+                <property name="hexpand">true</property>
+                <property name="vexpand">true</property>
+                <child>
+                  <object class="PanCanvas" id="canvas">
+                    <property name="hexpand">true</property>
+                    <property name="vexpand">true</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child type="sidebar">
+              <object class="GtkBox">
+                <property name="orientation">GTK_ORIENTATION_VERTICAL</property>
+                <property name="margin-top">10</property>
+                <property name="margin-start">10</property>
+                <property name="margin-end">10</property>
+                <property name="margin-bottom">10</property>
+                <property name="spacing">10</property>
+                <child>
+                  <object class="GtkFrame">
+                      <property name="label">Images</property>
+                      <property name="label-xalign">0.5</property>
+                      <style>
+                        <class name="side-bar-frame"/>
+                      </style>
+                      <child>
+                      <object class="GtkBox">
+                        <property name="orientation">GTK_ORIENTATION_VERTICAL</property>
+                        <property name="margin-top">10</property>
+                        <property name="margin-start">10</property>
+                        <property name="margin-end">10</property>
+                        <property name="margin-bottom">10</property>
+                        <child>
+                          <object class="GtkScrolledWindow">
+                            <child>
+                              <object class="GtkListView" id="file_list_view">
+                                <property name="vexpand">true</property>
+                                <property name="factory">
+                                  <object class="GtkBuilderListItemFactory">
+                                    <property name="bytes"><![CDATA[
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="GtkListItem">
+    <property name="child">
+      <object class="GtkLabel">
+        <property name="xalign">0</property>
+        <binding name="label">
+          <lookup name="filename" type="PanRecord">
+            <lookup name="item">GtkListItem</lookup>
+          </lookup>
+        </binding>
+      </object>
+    </property>
+  </template>
+</interface>
+                                 ]]></property>
+                                  </object>
+                                </property>
+                                <style>
+                                  <class name="pane-list-view"/>
+                                </style>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkActionBar">
+                            <property name="hexpand">true</property>
+                            <child>
+                              <object class="GtkButton" id="first_button">
+                                <property name="label">First</property>
+                                <property name="icon-name">go-first-symbolic</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkButton" id="prev_button">
+                                <property name="icon-name">go-previous-symbolic</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkButton" id="next_button">
+                                <property name="icon-name">go-next-symbolic</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkButton" id="last_button">
+                                <property name="icon-name">go-last-symbolic</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                       </object>
+                     </child>
+                   </object>
+                </child>
+                <child>
+                  <object class="GtkFrame">
+                      <property name="label">Annotations</property>
+                      <property name="label-xalign">0.5</property>
+                      <style>
+                        <class name="side-bar-frame"/>
+                      </style>
+                      <child>
+                      <object class="GtkBox">
+                        <property name="orientation">GTK_ORIENTATION_VERTICAL</property>
+                        <property name="margin-top">10</property>
+                        <property name="margin-start">10</property>
+                        <property name="margin-end">10</property>
+                        <property name="margin-bottom">10</property>
+                        <child>
+                          <object class="GtkScrolledWindow">
+                            <child>
+                              <object class="GtkColumnView" id="annot_column_view">
+                                <property name="vexpand">true</property>
+                                <property name="show-column-separators">true</property>
+                                <child>
+                                  <object class="GtkColumnViewColumn">
+                                    <property name="expand">true</property>
+                                    <property name="resizable">true</property>
+                                    <property name="title">X</property>
+                                    <property name="factory">
+                                      <object class="GtkBuilderListItemFactory">
+                                         <property name="bytes"><![CDATA[
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="GtkColumnViewCell">
+    <property name="child">
+      <object class="GtkLabel">
+        <property name="xalign">0</property>
+        <binding name="label">
+          <lookup name="x" type="PanAnnot">
+            <lookup name="item">GtkColumnViewCell</lookup>
+          </lookup>
+        </binding>
+      </object>
+    </property>
+  </template>
+</interface>]]>                        </property>
+                                      </object>
+                                    </property>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkColumnViewColumn">
+                                    <property name="expand">true</property>
+                                    <property name="resizable">true</property>
+                                    <property name="title">Y</property>
+                                    <property name="factory">
+                                      <object class="GtkBuilderListItemFactory">
+                                        <property name="bytes"><![CDATA[
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="GtkColumnViewCell">
+    <property name="child">
+      <object class="GtkLabel">
+        <property name="xalign">0</property>
+        <binding name="label">
+          <lookup name="y" type="PanAnnot">
+            <lookup name="item">GtkColumnViewCell</lookup>
+          </lookup>
+        </binding>
+      </object>
+    </property>
+  </template>
+</interface>]]>
+                                        </property>
+                                      </object>
+                                    </property>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                        </object>
+                        </child>
+                        <child>
+                          <object class="GtkActionBar">
+                            <child>
+                              <object class="GtkButton">
+                                <property name="icon-name">edit-delete-symbolic</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkButton">
+                                <property name="icon-name">edit-clear-all-symbolic</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                       </object>
+                     </child>
+                   </object>
+                </child>
+                <child>
+                  <object class="GtkFrame">
+                      <style>
+                        <class name="side-bar-frame"/>
+                      </style>
+                    <child>
+                      <object class="GtkBox">
+                        <property name="orientation">GTK_ORIENTATION_VERTICAL</property>
+                        <property name="margin-top">10</property>
+                        <property name="margin-start">10</property>
+                        <property name="margin-end">10</property>
+                        <property name="margin-bottom">10</property>
+                        <property name="spacing">10</property>
+                        <child>
+                          <object class="GtkBox">
+                            <property name="margin-top">10</property>
+                            <property name="margin-start">10</property>
+                            <property name="margin-end">10</property>
+                            <property name="margin-bottom">10</property>
+                            <property name="spacing">10</property>
+                            <child>
+                              <object class="GtkColorButton" id="color_button">
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkScale" id="alpha_scale">
+                                <property name="hexpand">true</property>
+                                <property name="adjustment">
+                                  <object class="GtkAdjustment">
+                                    <property name="lower">0.0</property>
+                                    <property name="upper">1.0</property>
+                                    <property name="value">0.6</property>
+                                    <property name="step-increment">0.1</property>
+                                  </object>
+                                </property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkScale" id="radius_scale">
+                            <property name="hexpand">true</property>
+                            <property name="adjustment">
+                              <object class="GtkAdjustment">
+                                <property name="lower">1</property>
+                                <property name="upper">100</property>
+                                <property name="value">10</property>
+                                <property name="step-increment">10</property>
+                              </object>
+                            </property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </property>
+      </object>
+    </property>
+  </template>
+  <menu id="primary_menu">
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">_New</attribute>
+        <attribute name="action">win.new</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">_Open</attribute>
+        <attribute name="action">win.open</attribute>
+      </item>
+        </section>
+      <section>
+      <item>
+        <attribute name="label" translatable="yes">_Save</attribute>
+        <attribute name="action">win.save</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">_Save As</attribute>
+        <attribute name="action">win.save_as</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">Undo</attribute>
+        <attribute name="action">win.undo</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Redo</attribute>
+        <attribute name="action">win.redo</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">_Preferences</attribute>
+        <attribute name="action">app.preferences</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">_Keyboard Shortcuts</attribute>
+        <attribute name="action">win.show-help-overlay</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">_About Pan</attribute>
+        <attribute name="action">app.about</attribute>
+      </item>
+    </section>
+  </menu>
+</interface>
+

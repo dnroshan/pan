@@ -1,0 +1,13 @@
+[default]
+name=Default
+runtime=host
+toolchain=default
+config-opts=
+run-opts=
+prefix=/home/roshan/Projects/.gnome-builder/projects/pan/install/host
+app-id=
+postbuild=
+prebuild=
+run-command=
+builddir=true
+default=true

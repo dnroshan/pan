@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Pan
+Exec=pan
+Icon=me.scratchspace.Pan
+Terminal=false
+Type=Application
+Categories=Utility;
+Keywords=GTK;
+StartupNotify=true
+DBusActivatable=true

@@ -1,0 +1,25 @@
+---
+
+BreakBeforeBraces: Custom
+BraceWrapping:
+  AfterFunction: true
+  AfterEnum: true
+  AfterStruct: true
+  AfterUnion: true
+
+IndentWidth: 4
+ColumnLimit: 0
+UseTab: Never
+TabWidth: 8
+
+SpaceBeforeAssignmentOperators: true
+PointerAlignment: Right
+KeepEmptyLines:
+  AtEndOfFile: true
+
+BreakAfterReturnType: AllDefinitions
+SpaceBeforeParens: Always
+AllowAllArgumentsOnNextLine: false
+BinPackArguments: false
+BinPackParameters: false
+AllowAllParametersOfDeclarationOnNextLine: false
